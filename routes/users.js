@@ -9,20 +9,15 @@ const users = require('../controllers/users');
 const catchAsync = require('../utils/catchAsync');
 
 // Register
-router.get('/register',users.renderRegister);
-
-router.post('/register',catchAsync(users.registerUser));
+router.route('/register')
+    .get(users.renderRegister)
+    .post(catchAsync(users.registerUser));
 
 // Login
-
-router.get('/login',users.renderLoginForm);
-
-router.post('/login',passport.authenticate('local',{failureFlash:true,failureRedirect:'/login'}),users.login);
+router.route('/login')
+    .get(users.renderLoginForm)
+    .post(passport.authenticate('local',{failureFlash:true,failureRedirect:'/login'}),users.login);
 // logout 
 
-router.get('/logout',(req, res)=>{
-    req.logout();
-    req.flash('success','Successfully logout')
-    res.redirect('/campgrounds');
-})
+router.get('/logout',users.logout);
 module.exports = router;
