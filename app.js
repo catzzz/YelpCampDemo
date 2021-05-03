@@ -8,6 +8,9 @@ const ejsMate = require('ejs-mate');
 const flash = require('connect-flash');
 const catchAsync = require('./utils/catchAsync');
 const ExpressError = require('./utils/ExpressError');
+const passport = require('passport');
+const LocalStrategy = require('passport-local');
+const User = require('./models/user');
 
 
 const campgrounds = require('./routes/campgrounds');
@@ -46,7 +49,6 @@ app.use(morgan('tiny'));
 
 
 
-
 app.use(express.static(path.join(__dirname, 'public')))
 
 
@@ -64,14 +66,36 @@ const sessionConfig = {
 }
 app.use(session(sessionConfig));
 app.use(flash());
+
+
+// Passport setting
+
+app.use(passport.initialize());
+app.use(passport.session());
+passport.use(new LocalStrategy(User.authenticate()));
+
+passport.serializeUser(User.serializeUser()); // serialize -> save user in session
+passport.deserializeUser(User.deserializeUser());// deserialize -> get user out of session
+
+
+
 app.use((req, res, next )=>{
     res.locals.success = req.flash('success');
     res.locals.error = req.flash('error');
     next();
 })
 
+// Routes
+
+app.get('/fakeUser', async(req, res) =>{
+    const user = new User({email:'test@gmail.com', username:'jimmy'});
+    const newUser = await User.register(user,'monkey');
+    res.send(newUser);
+})
 app.use('/campgrounds',campgrounds);
 app.use('/campgrounds/:id/reviews',reviews);
+
+
 
 app.get('/',(req,res)=>{
     res.render('home');
