@@ -21,13 +21,14 @@ db.once("open", () => {
 });
 
 const sample = (array) => array[Math.floor(Math.random() * array.length)];
-
+// user id :609024b1e36ad31bfb9cf0d6
 const seedBD = async() => {
     await Campground.deleteMany({});
     for(let i = 0 ; i < 50; i++){
         const random1000 = Math.floor(Math.random()*1000);
         const price = Math.floor(Math.random()*20) +10 ;
         const camp = new Campground({
+            author: '609024b1e36ad31bfb9cf0d6',
             location : `${cities[random1000].city}, ${cities[random1000.state]}`,
             title: `${sample(descriptors)} ${sample(places)}`,
             image: 'https://source.unsplash.com/collection/483251',
