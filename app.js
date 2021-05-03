@@ -13,12 +13,14 @@ const LocalStrategy = require('passport-local');
 const User = require('./models/user');
 
 
-const campgrounds = require('./routes/campgrounds');
-const reviews = require('./routes/reviews');
+// routes
+const userRoute = require('./routes/users');
+const campgroundRoute = require('./routes/campgrounds');
+const reviewRoute = require('./routes/reviews');
 
 const Joi = require('joi');
 const {campgroundSchema ,reviewSchema} = require('./schemas');
-//const Campground = require('./models/campground');
+
 
 const { slice } = require('./seeds/cities');
 
@@ -87,13 +89,9 @@ app.use((req, res, next )=>{
 
 // Routes
 
-app.get('/fakeUser', async(req, res) =>{
-    const user = new User({email:'test@gmail.com', username:'jimmy'});
-    const newUser = await User.register(user,'monkey');
-    res.send(newUser);
-})
-app.use('/campgrounds',campgrounds);
-app.use('/campgrounds/:id/reviews',reviews);
+app.use('/',userRoute);
+app.use('/campgrounds',campgroundRoute);
+app.use('/campgrounds/:id/reviews',reviewRoute);
 
 
 
