@@ -3,7 +3,7 @@
 const {campgroundSchema,reviewSchema } = require('./schemas');
 const ExpressError = require('./utils/ExpressError');
 const Campground = require('./models/campground');
-
+const Review = require('./models/review');
 
 module.exports.isLoggedIn = (req, res, next) => {
     
@@ -51,3 +51,13 @@ module.exports.validateReview = (req,res, next) =>{
         next();
     }
 };
+// Review
+module.exports.isReviewAuthor = async(req, res, next)=>{
+    const {id,reviewId} = req.params;
+    const review = await Review.findById(reviewId);
+    if (!review.author.equals(req.user._id)){
+        req.flash('error','Youd do not have premission to do that !!!');
+        return res.redirect(`/campgrounds/${id}`)
+    }
+    next();
+}
