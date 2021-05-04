@@ -5,6 +5,9 @@ const ExpressError = require('../utils/ExpressError');
 const Campground = require('../models/campground');
 const campgrounds = require('../controllers/campgrounds');
 
+var multer  = require('multer')
+var upload = multer({ dest: 'uploads/' })
+
 const {isLoggedIn,isAuthor, validateCampground } = require('../middleware');
 
 
