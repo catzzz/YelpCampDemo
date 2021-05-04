@@ -19,11 +19,7 @@ const {isLoggedIn,isAuthor, validateCampground } = require('../middleware');
 
 router.route('/')
     .get(catchAsync(campgrounds.index))
-    .post(upload.array('image'),(req,res)=>{
-        console.log(req.body, req.files);
-        res.send('It Work');
-    });
-    //.post(isLoggedIn,validateCampground ,catchAsync(campgrounds.createCampground));
+    .post(isLoggedIn, upload.array('image'),validateCampground,catchAsync(campgrounds.createCampground));
 
 
 router.get('/new',isLoggedIn, campgrounds.renderNewForm); // this has to be in front of /:id otherwise the node treat it as id
