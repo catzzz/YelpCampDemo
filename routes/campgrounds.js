@@ -5,8 +5,11 @@ const ExpressError = require('../utils/ExpressError');
 const Campground = require('../models/campground');
 const campgrounds = require('../controllers/campgrounds');
 
-var multer  = require('multer')
-var upload = multer({ dest: 'uploads/' })
+
+const {storage} = require('../cloudinary');
+const multer  = require('multer')
+const upload = multer({ dest: 'uploads/' })
+
 
 const {isLoggedIn,isAuthor, validateCampground } = require('../middleware');
 
@@ -17,7 +20,10 @@ const {isLoggedIn,isAuthor, validateCampground } = require('../middleware');
 
 router.route('/')
     .get(catchAsync(campgrounds.index))
-    .post(isLoggedIn,validateCampground ,catchAsync(campgrounds.createCampground));
+    .post(upload.single('image'),(req,res)=>{
+        res.send(req.body,req.file);
+    });
+    //.post(isLoggedIn,validateCampground ,catchAsync(campgrounds.createCampground));
 
 
 router.get('/new',isLoggedIn, campgrounds.renderNewForm); // this has to be in front of /:id otherwise the node treat it as id
