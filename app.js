@@ -18,7 +18,7 @@ const ExpressError = require('./utils/ExpressError');
 const passport = require('passport');
 const LocalStrategy = require('passport-local');
 const User = require('./models/user');
-
+const mongoSanitize = require('express-mongo-sanitize');
 
 // routes
 const userRoute = require('./routes/users');
@@ -55,7 +55,9 @@ app.use(methodOverride('_method'));
 app.use(morgan('tiny'));
 
 
-
+app.use(mongoSanitize({
+    replaceWith: '_'
+}))
 
 
 app.use(express.static(path.join(__dirname, 'public')))
