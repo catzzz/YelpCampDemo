@@ -7,9 +7,13 @@ const ImageSchema = new Schema({
     filename: String
 });
 
+const opts = { toJSON: { virtuals: true } };
+
 ImageSchema.virtual('thumbnail').get(function(){
     return this.url.replace('/upload','/upload/w_200');
 }) 
+
+
 
 const CampgroundSchema = new Schema({
     title: String,
@@ -38,7 +42,7 @@ const CampgroundSchema = new Schema({
             ref: 'Review'
         }
     ]
-});
+},opts);
 
 CampgroundSchema.post('findOneAndDelete',async function(doc){
     if(doc){
@@ -49,5 +53,11 @@ CampgroundSchema.post('findOneAndDelete',async function(doc){
         })
     }
 })
+
+
+CampgroundSchema.virtual('properties.popUpMarkup').get(function(){
+    return "I AM POPUP TEXT";
+});
+
 
 module.exports = mongoose.model('Campground', CampgroundSchema);
