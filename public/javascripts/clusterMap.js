@@ -105,7 +105,7 @@ map.on('load', function () {
     // the location of the feature, with
     // description HTML from its properties.
     map.on('click', 'unclustered-point', function (e) {
-        
+        const text = e.features[0].properties.popUpMarkup;
         var coordinates = e.features[0].geometry.coordinates.slice();
         var mag = e.features[0].properties.mag;
         var tsunami;
@@ -126,7 +126,7 @@ map.on('load', function () {
         new mapboxgl.Popup()
         .setLngLat(coordinates)
         .setHTML(
-            'magnitude: ' + mag + '<br>Was there a tsunami?: ' + tsunami
+            text
         )
         .addTo(map);
     });
