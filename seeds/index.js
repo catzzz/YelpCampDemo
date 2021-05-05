@@ -31,7 +31,10 @@ const seedBD = async() => {
             author: '609024b1e36ad31bfb9cf0d6',
             location : `${cities[random1000].city}, ${cities[random1000.state]}`,
             title: `${sample(descriptors)} ${sample(places)}`,
-            geometry:{ type: 'Point', coordinates: [ -122.3301, 47.6038 ] },
+            geometry:{ type: 'Point', coordinates: [ 
+                cities[random1000].longitude,
+                cities[random1000].latitude] 
+            },
             images: [
                 {
                   
