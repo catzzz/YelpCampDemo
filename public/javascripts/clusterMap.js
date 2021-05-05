@@ -9,6 +9,9 @@ mapboxgl.accessToken = mapToken;
     zoom: 3
 });
  
+map.addControl(new mapboxgl.NavigationControl());
+
+
 map.on('load', function () {
     // Add a new source from our GeoJSON data and
     // set the 'cluster' option to true. GL-JS will
