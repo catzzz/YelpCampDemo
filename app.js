@@ -4,7 +4,6 @@ if (process.env.NODE_ENV !== "production") {
     require('dotenv').config();
 }
 
-
 const express = require('express');
 const path = require('path');
 const mongoose = require('mongoose');
@@ -32,12 +31,23 @@ const helmet = require('helmet');
 
 const { slice } = require('./seeds/cities');
 
+// Mongo Atlas
+//const dbUrl = process.env.DB_URL
 
 
+
+// mongoose.connect(dbUrl, {
+//     useNewUrlParser: true,
+//     useCreateIndex: true,
+//     useUnifiedTopology: true,
+//     useFindAndModify: false
+// });
+
+// Local 
 mongoose.connect('mongodb://localhost:27017/yelp-camp', {
     useNewUrlParser: true,
     useCreateIndex: true,
-    useUnifiedTopology: true,
+    useUnifiedTopology: true,    
     useFindAndModify: false
 });
 
