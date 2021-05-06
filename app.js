@@ -10,6 +10,9 @@ const mongoose = require('mongoose');
 const methodOverride = require('method-override');
 const morgan = require('morgan');
 const session = require('express-session');
+
+
+
 const ejsMate = require('ejs-mate');
 const flash = require('connect-flash');
 const catchAsync = require('./utils/catchAsync');
@@ -18,6 +21,8 @@ const passport = require('passport');
 const LocalStrategy = require('passport-local');
 const User = require('./models/user');
 const mongoSanitize = require('express-mongo-sanitize');
+
+const MongoDBStore = require("connect-mongo");
 
 // routes
 const userRoute = require('./routes/users');
@@ -30,26 +35,21 @@ const helmet = require('helmet');
 
 
 const { slice } = require('./seeds/cities');
+const MongoStore = require('connect-mongo');
 
 // Mongo Atlas
-//const dbUrl = process.env.DB_URL
+const dbUrl = 'mongodb://localhost:27017/yelp-camp';//process.env.DB_URL
 
 
 
-// mongoose.connect(dbUrl, {
-//     useNewUrlParser: true,
-//     useCreateIndex: true,
-//     useUnifiedTopology: true,
-//     useFindAndModify: false
-// });
-
-// Local 
-mongoose.connect('mongodb://localhost:27017/yelp-camp', {
+mongoose.connect(dbUrl, {
     useNewUrlParser: true,
     useCreateIndex: true,
-    useUnifiedTopology: true,    
+    useUnifiedTopology: true,
     useFindAndModify: false
 });
+
+
 
 const db = mongoose.connection;
 db.on("error", console.error.bind(console, "connection error:"));
@@ -76,6 +76,11 @@ app.use(express.static(path.join(__dirname, 'public')))
 
 
 const sessionConfig = {
+    store: MongoStore.create({
+        mongoUrl: dbUrl,
+        secret:'thisshouldbeabettersecret!',
+        touchAfter: 24 * 60 * 60
+      }),
     name:'session',
     secret: 'thisshouldbeabettersecret!',
     resave:false,
