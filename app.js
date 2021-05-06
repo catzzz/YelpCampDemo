@@ -38,7 +38,7 @@ const { slice } = require('./seeds/cities');
 const MongoStore = require('connect-mongo');
 
 // Mongo Atlas
-const dbUrl = 'mongodb://localhost:27017/yelp-camp';//process.env.DB_URL
+const dbUrl = process.env.DB_URL|| 'mongodb://localhost:27017/yelp-camp';
 
 
 
@@ -74,15 +74,15 @@ app.use(mongoSanitize({
 app.use(express.static(path.join(__dirname, 'public')))
 
 
-
+const secret = process.env.SECRET ||'thisshouldbeabettersecret!'
 const sessionConfig = {
     store: MongoStore.create({
         mongoUrl: dbUrl,
-        secret:'thisshouldbeabettersecret!',
+        secret,
         touchAfter: 24 * 60 * 60
       }),
     name:'session',
-    secret: 'thisshouldbeabettersecret!',
+    secret,
     resave:false,
     saveUninitialized:true,
     cookie:{
